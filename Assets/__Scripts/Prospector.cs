@@ -18,6 +18,11 @@ public class Prospector : MonoBehaviour {
 	static public int 			SCORE_FROM_PREV_ROUND = 0;
 	static public int			HIGH_SCORE = 0;
 
+	public Vector3				fsPosMid = new Vector3(0.5f, 0.90f, 0);
+	public Vector3				fsPosRun = new Vector3(0.5f, 0.75f, 0);
+	public Vector3				fsPosMid2 = new Vector3(0.5f, 0.50f, 0);
+	public Vector3				fsPosEnd = new Vector3(1.0f, 0.65f, 0);
+
 	public Deck					deck;
 	public TextAsset			deckXML;
 
@@ -37,6 +42,7 @@ public class Prospector : MonoBehaviour {
 	public int					chain = 0;
 	public int					scoreRun = 0;
 	public int 					score = 0;
+	public FloatingScore		fsRun;
 
 	void Awake(){
 		S = this;
@@ -50,6 +56,8 @@ public class Prospector : MonoBehaviour {
 	}
 
 	void Start() {
+		Scoreboard.S.score = score;
+
 		deck = GetComponent<Deck> ();
 		deck.InitDeck (deckXML.text);
 		Deck.Shuffle (ref deck.cards);
@@ -307,6 +315,7 @@ public class Prospector : MonoBehaviour {
 
 	void ScoreManager(ScoreEvent sEvt)
 	{
+		List<Vector3> fsPts;
 		switch (sEvt) 
 		{
 		case ScoreEvent.draw:
@@ -315,10 +324,41 @@ public class Prospector : MonoBehaviour {
 			chain = 0;
 			score += scoreRun;
 			scoreRun = 0;
+
+			if(fsRun != null)
+			{
+				fsPts = new List<Vector3>();
+				fsPts.Add(fsPosRun);
+				fsPts.Add (fsPosMid2);
+				fsPts.Add(fsPosEnd);
+				fsRun.reportFinishTo = Scoreboard.S.gameObject;
+				fsRun.Init(fsPts, 0, 1);
+				fsRun.fontSizes = new List<float>(new float[]{28,36,4});
+				fsRun = null;
+			}
 			break;
 		case ScoreEvent.mine:
 			chain++;
 			scoreRun += chain;
+			FloatingScore fs;
+			Vector3 p0 = Input.mousePosition;
+			p0.x /= Screen.width;
+			p0.y /= Screen.height;
+			fsPts = new List<Vector3>();
+			fsPts.Add(p0);
+			fsPts.Add (fsPosMid);
+			fsPts.Add(fsPosRun);
+			fs = Scoreboard.S.CreateFloatingScore(chain,fsPts);
+			fsRun.fontSizes = new List<float>(new float[]{4,50,28});
+			if (fsRun == null)
+			{
+				fsRun = fs;
+				fsRun.reportFinishTo = fsRun.gameObject;
+			}
+			else
+			{
+				fs.reportFinishTo = fsRun.gameObject;
+			}
 			break;
 		}
 
