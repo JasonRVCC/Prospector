@@ -90,17 +90,23 @@ public class FloatingScore : MonoBehaviour {
 				}
 				else
 				{
-					state = FSState.active;
-				}
-
-				Vector3 pos = Utils.Bezier(uC, bezierPts);
-				transform.position = pos;
-				if(fontSizes != null && fontSizes.Count>0)
-				{
-					int size = Mathf.RoundToInt(Utils.Bezier(uC, fontSizes));
-					GetComponent<GUIText>().fontSize = size;
+					state = FSState.idle;
 				}
 			}
+
+			else
+			{
+					state = FSState.active;
+			}
+
+			Vector3 pos = Utils.Bezier(uC, bezierPts);
+			transform.position = pos;
+			if(fontSizes != null && fontSizes.Count>0)
+			{
+				int size = Mathf.RoundToInt(Utils.Bezier(uC, fontSizes));
+				GetComponent<GUIText>().fontSize = size;
+			}
+
 		}
 	}
 }

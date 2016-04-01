@@ -349,11 +349,11 @@ public class Prospector : MonoBehaviour {
 			fsPts.Add (fsPosMid);
 			fsPts.Add(fsPosRun);
 			fs = Scoreboard.S.CreateFloatingScore(chain,fsPts);
-			fsRun.fontSizes = new List<float>(new float[]{4,50,28});
+			fs.fontSizes = new List<float>(new float[]{4,50,28});
 			if (fsRun == null)
 			{
 				fsRun = fs;
-				fsRun.reportFinishTo = fsRun.gameObject;
+				fsRun.reportFinishTo = null;
 			}
 			else
 			{
