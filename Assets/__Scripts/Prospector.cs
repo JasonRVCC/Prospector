@@ -12,6 +12,8 @@ public class Prospector : MonoBehaviour {
 	public Layout 				layout;
 	public TextAsset 			layoutXML;
 
+	public List<CardProspector> drawpile;
+
 	void Awake(){
 		S = this;
 	}
@@ -23,6 +25,19 @@ public class Prospector : MonoBehaviour {
 
 		layout = GetComponent<Layout> ();
 		layout.ReadLayout (layoutXML.text);
+		drawpile = ConvertListCardsToListCardProspectors(deck.cards);
+	}
+
+	List<CardProspector> ConvertListCardsToListCardProspectors(List<Card> lCD)
+	{
+			List<CardProspector> lCP = new List<CardProspector>();
+			CardProspector tCP;
+			foreach(Card tCD in lCD)
+			{
+				tCP =tCD as CardProspector;
+				lCP.Add(tCP);
+			}
+			return(lCP);
 	}
 
 }

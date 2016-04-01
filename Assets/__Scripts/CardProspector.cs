@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class CardProspector : MonoBehaviour {
+public enum CardState
+{
+	drawpile,
+	tableau,
+	target,
+	discard
+}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+public class CardProspector : Card {
+
+	public CardState state = CardState.drawpile;
+	public List<CardProspector> hiddenBy = new List<CardProspector> ();
+	public int layoutID;
+	public SlotDef slotDef;
 }
